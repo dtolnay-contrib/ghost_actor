@@ -12,9 +12,22 @@ ENV = RUSTFLAGS='$(RUSTFLAGS)' CARGO_BUILD_JOBS='$(shell nproc || sysctl -n hw.p
 
 all: test
 
+bump:
+	@if [ "$(ver)x" = "x" ]; then \
+		echo "# USAGE: 'make bump ver=0.0.1-alpha.42'"; \
+		exit 1; \
+	fi
+	@for toml in $$(find crates -name Cargo.toml); do \
+		echo "# updating version in $${toml} to $(ver)"; \
+		sed -i'' 's/^version = \"[^"]*"$$/version = "$(ver)"/g' $${toml}; \
+		sed -i'' 's/^ghost_actor = { version = \"[^"]*"/ghost_actor = { version = "=$(ver)"/g' $${toml}; \
+	done
+
 publish: tools
 	git diff --exit-code
 	cargo publish --manifest-path crates/ghost_actor/Cargo.toml
+	echo "-- wait for crates.io... --"; sleep 30
+	cargo publish --manifest-path crates/ghost_actor_derive/Cargo.toml
 	VER="v$$(grep version crates/ghost_actor/Cargo.toml | head -1 | cut -d ' ' -f 3 | cut -d \" -f 2)"; git tag -a $$VER -m $$VER
 	git push --tags
 
@@ -22,6 +35,7 @@ test: tools
 	$(ENV) cargo fmt -- --check
 	$(ENV) cargo clippy
 	$(ENV) RUST_BACKTRACE=1 cargo test
+	$(ENV) cargo readme -r crates/ghost_actor_derive -o README.md
 	$(ENV) cargo readme -r crates/ghost_actor -o README.md
 	$(ENV) cargo readme -r crates/ghost_actor -o ../../README.md
 	@if [ "${CI}x" != "x" ]; then git diff --exit-code; fi

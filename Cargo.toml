@@ -1,5 +1,6 @@
 [workspace]
 members = [
   "crates/ghost_actor",
+  "crates/ghost_actor_derive",
   "crates/ghost_actor_doc_example",
 ]

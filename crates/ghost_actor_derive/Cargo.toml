@@ -1,5 +1,5 @@
 [package]
-name = "ghost_actor"
+name = "ghost_actor_derive"
 version = "0.4.0-alpha.1"
 authors = ["Holochain Core Dev Team <devcore@holochain.org>"]
 edition = "2018"
@@ -11,11 +11,12 @@ readme = "README.md"
 documentation = "https://docs.rs/ghost_actor"
 repository = "https://github.com/holochain/ghost_actor"
 
+[lib]
+path = "src/lib.rs"
+proc-macro = true
+
 [dependencies]
-Inflector = "0.11"
-proc-macro2 = "1.0"
-quote = "1.0"
-syn = { version = "1.0", features = [ "extra-traits" ] }
+ghost_actor = { version = "=0.4.0-alpha.1", path = "../ghost_actor" }
 
 [dev-dependencies]
-tokio = { version = "0.2", features = [ "full" ] }
+tokio = { version = "0.2", features = ["full"] }
