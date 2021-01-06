@@ -12,6 +12,7 @@ documentation = "https://docs.rs/ghost_actor"
 repository = "https://github.com/holochain/ghost_actor"
 
 [dependencies]
+futures = "0.3.8"
 Inflector = "0.11"
 proc-macro2 = "1.0"
 quote = "1.0"

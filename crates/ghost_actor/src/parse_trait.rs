@@ -60,6 +60,6 @@ pub fn parse_trait(input: TokenStream) -> ParsedTrait {
 
     let out = ParsedTrait { name, fns };
 
-    println!("{:#?}", out);
+    //println!("{:#?}", out);
     out
 }
